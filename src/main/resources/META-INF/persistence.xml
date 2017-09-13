@@ -5,6 +5,10 @@
     <class>br.uff.dac.t1.controleprojetos.model.Pessoa</class>
     <class>br.uff.dac.t1.controleprojetos.model.Aluno</class>
     <class>br.uff.dac.t1.controleprojetos.model.Turma</class>
+    <class>br.uff.dac.t1.controleprojetos.model.Disciplina</class>
+    <class>br.uff.dac.t1.controleprojetos.model.Professor</class>
+    <class>br.uff.dac.t1.controleprojetos.model.Projeto</class>
+    <class>br.uff.dac.t1.controleprojetos.model.Titulacao</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/Projetos?zeroDateTimeBehavior=convertToNull"/>

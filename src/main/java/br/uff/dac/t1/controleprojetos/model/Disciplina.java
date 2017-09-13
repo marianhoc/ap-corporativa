@@ -8,24 +8,49 @@ package br.uff.dac.t1.controleprojetos.model;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
-
 /**
  *
  * @author felipe
  */
+
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Pessoa implements Serializable {
+public class Disciplina implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(nullable = false)
     private String nome;
-    private String cpf;
 
-    public Pessoa() {
+    @ManyToOne
+    private Professor professor;
+
+    @OneToOne
+    private Turma turma;
+
+    public Disciplina() {
+    }
+
+    public Disciplina(String nome, Professor professor, Turma turma) {
+        this.nome = nome;
+        this.professor = professor;
+        this.turma = turma;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
+
+    public Turma getTurma() {
+        return turma;
+    }
+
+    public void setTurma(Turma turma) {
+        this.turma = turma;
     }
 
     public int getId() {
@@ -44,19 +69,11 @@ public class Pessoa implements Serializable {
         this.nome = nome;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.nome);
-        hash = 47 * hash + Objects.hashCode(this.cpf);
+        int hash = 5;
+        hash = 59 * hash + this.id;
+        hash = 59 * hash + Objects.hashCode(this.nome);
         return hash;
     }
 
@@ -71,13 +88,14 @@ public class Pessoa implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Pessoa other = (Pessoa) obj;
+        final Disciplina other = (Disciplina) obj;
         return this.id == other.id;
     }
 
     @Override
     public String toString() {
-        return "Pessoa{" + "id=" + id + ", nome=" + nome + ", cpf=" + cpf + '}';
+        return "Disciplina{" + "id=" + id + ", nome=" + nome + '}';
     }
-        
+   
 }
+

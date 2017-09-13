@@ -6,15 +6,16 @@
 package br.uff.dac.t1.controleprojetos.model;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
-import static javax.persistence.CascadeType.ALL;
+import java.util.Set;
+import javax.annotation.ManagedBean;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 
 /**
@@ -22,23 +23,44 @@ import javax.persistence.ManyToMany;
  * @author felipe
  */
 @Entity
-public class Aluno extends Pessoa implements Serializable {
+@Inheritance(strategy = InheritanceType.JOINED)
+@ManagedBean
+public class Aluno extends Pessoa implements Serializable  {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
+
+    @Column(nullable = false)
     private ECurso curso;
-    private float cr;
+    @Column(nullable = false)
     private String matricula;
+
+    private Double cr;
+
+    @ManyToMany
+    private Set<Projeto> projetos;
     
-    
-    @ManyToMany(cascade = ALL, targetEntity = Turma.class)
-    @JoinTable(joinColumns = {@JoinColumn(name = "fk_aluno")}, inverseJoinColumns = {@JoinColumn(name="fk_turma")})
-    private List<Turma> turmas;
-    
+    @ManyToMany
+    private Set<Turma> turmas;
+
     public Aluno() {
-    }    
+    }
+
+    public Aluno(ECurso curso, String matricula, Double cr, Set<Projeto> projetos) {
+        this.curso = curso;
+        this.matricula = matricula;
+        this.cr = cr;
+        this.projetos = projetos;
+    }
+
+    public Set<Projeto> getProjetos() {
+        return projetos;
+    }
+
+    public void setProjetos(Set<Projeto> projetos) {
+        this.projetos = projetos;
+    }
 
     public ECurso getCurso() {
         return curso;
@@ -48,11 +70,11 @@ public class Aluno extends Pessoa implements Serializable {
         this.curso = curso;
     }
 
-    public float getCr() {
+    public Double getCr() {
         return cr;
     }
 
-    public void setCr(float cr) {
+    public void setCr(Double cr) {
         this.cr = cr;
     }
 
@@ -64,11 +86,18 @@ public class Aluno extends Pessoa implements Serializable {
         this.matricula = matricula;
     }
 
+    public ECurso[] getCursos() {
+        return ECurso.values();
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        return hash;
+        int result = super.hashCode();
+        result = 31 * result + id;
+        result = 31 * result + (curso != null ? curso.hashCode() : 0);
+        result = 31 * result + (matricula != null ? matricula.hashCode() : 0);
+        result = 31 * result + (cr != null ? cr.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -83,20 +112,22 @@ public class Aluno extends Pessoa implements Serializable {
             return false;
         }
         final Aluno other = (Aluno) obj;
-        return Objects.equals(this.id, other.id);
+        if (this.id != other.id) {
+            return false;
+        }
+        return Objects.equals(this.matricula, other.matricula);
     }
 
     @Override
     public String toString() {
         return "Aluno{" + "id=" + id + ", curso=" + curso + ", cr=" + cr + ", matricula=" + matricula + '}';
-    }
+    }       
 
-    public List<Turma> getTurma() {
+    public Set<Turma> getTurmas() {
         return turmas;
     }
 
-    public void setTurma(List<Turma> turma) {
-        this.turmas = turma;
+    public void setTurmas(Set<Turma> turmas) {
+        this.turmas = turmas;
     }
-  
 }

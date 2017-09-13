@@ -6,61 +6,57 @@
 package br.uff.dac.t1.controleprojetos.model;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import java.util.Objects;
+import java.util.Set;
+import javax.persistence.*;
 
 /**
  *
  * @author felipe
  */
-@Entity
-public class Turma implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+@Entity
+public class Turma implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    
+    private int id;
+
     private String codigo;
     private String periodo;
     private ETurno turno;
     private String sala;
+
+    @OneToOne
+    private Disciplina disciplina;
     
-    
-    @ManyToMany(mappedBy = "turmas", cascade = CascadeType.ALL, targetEntity = Aluno.class)
-    private List<Aluno> alunos;
+    @ManyToMany
+    private Set<Aluno> alunos;
 
     public Turma() {
-    }    
+    }
 
-    public Long getId() {
+    public Turma(String codigo, String periodo, ETurno turno, String sala, Disciplina disciplina) {
+        this.codigo = codigo;
+        this.periodo = periodo;
+        this.turno = turno;
+        this.sala = sala;
+        this.disciplina = disciplina;
+    }
+
+    public Disciplina getDisciplina() {
+        return disciplina;
+    }
+
+    public void setDisciplina(Disciplina disciplina) {
+        this.disciplina = disciplina;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Turma)) {
-            return false;
-        }
-        Turma other = (Turma) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     public String getCodigo() {
@@ -96,15 +92,47 @@ public class Turma implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "Turma{" + "id=" + id + ", codigo=" + codigo + ", periodo=" + periodo + ", turno=" + turno + ", sala=" + sala + '}';
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + this.id;
+        hash = 23 * hash + Objects.hashCode(this.codigo);
+        hash = 23 * hash + Objects.hashCode(this.periodo);
+        hash = 23 * hash + Objects.hashCode(this.turno);
+        hash = 23 * hash + Objects.hashCode(this.sala);
+        return hash;
     }
 
-    public List<Aluno> getAlunos() {
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Turma other = (Turma) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.codigo, other.codigo)) {
+            return false;
+        }
+        return Objects.equals(this.periodo, other.periodo);
+    }
+
+    @Override
+    public String toString() {
+        return "Turma{" + "id=" + id + ", codigo=" + codigo + ", periodo=" + periodo + ", turno=" + turno + ", sala=" + sala + '}';
+    } 
+
+    public Set<Aluno> getAlunos() {
         return alunos;
     }
 
-    public void setAlunos(List<Aluno> alunos) {
+    public void setAlunos(Set<Aluno> alunos) {
         this.alunos = alunos;
     }
     
