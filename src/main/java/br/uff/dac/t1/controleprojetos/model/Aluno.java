@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 /**
  *
@@ -34,8 +33,8 @@ public class Aluno extends Pessoa implements Serializable {
     private String matricula;
     
     
-    @ManyToMany(targetEntity = Turma.class, cascade = ALL, mappedBy = "turma")
-    @JoinTable(joinColumns = {@JoinColumn(name = "ID")}, inverseJoinColumns = {@JoinColumn(name="ID")})
+    @ManyToMany(cascade = ALL, targetEntity = Turma.class)
+    @JoinTable(joinColumns = {@JoinColumn(name = "fk_aluno")}, inverseJoinColumns = {@JoinColumn(name="fk_turma")})
     private List<Turma> turmas;
     
     public Aluno() {

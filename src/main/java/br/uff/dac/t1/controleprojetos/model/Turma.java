@@ -32,7 +32,7 @@ public class Turma implements Serializable {
     private String sala;
     
     
-    @ManyToMany(mappedBy = "turmas", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "turmas", cascade = CascadeType.ALL, targetEntity = Aluno.class)
     private List<Aluno> alunos;
 
     public Turma() {
