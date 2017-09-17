@@ -35,25 +35,21 @@ public class TesteAluno {
         turma.setCodigo("123");
         turma.setPeriodo("8");
         turma.setSala("205");
-        turma.setTurno(ETurno.T);        
-        al.add(aluno);
-        
-        turma.setAlunos(al);
+        turma.setTurno(ETurno.T);
+  
         System.out.println(al.toString());
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjetosPU");
         EntityManager em = emf.createEntityManager();
-        
-        
-        EntityTransaction et = em.getTransaction();
-        
-        et.begin();
-        
+        EntityTransaction t = em.getTransaction();
+        t.begin();
         em.persist(aluno);
         em.persist(turma);
-        
-        et.commit();
-        
+        em.flush();
+        aluno.getTurmas().add(turma);
+        em.merge(aluno);
+        em.flush();
+        t.commit();
         em.close();
         emf.close();
     }
